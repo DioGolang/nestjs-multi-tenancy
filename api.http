@@ -1,5 +1,5 @@
-GET http://localhost:3000/users
-Content-Type: application/json
+#GET http://localhost:3000/users
+#Content-Type: application/json
 
 ###
 
@@ -8,24 +8,29 @@ Content-Type: application/json
 
 {
   "name" : "john Doe 1:10",
-  "email": "teste@test12.com.br",
+  "email": "teste@test30.com.br",
   "password": "12345"
 }
 
 > {% client.global.set("id", response.body.id); %}
 
 ###
+@ emailPartner = "test@partner.com"
 
 POST http://localhost:3000/partners/users
 Content-Type: application/json
 
 {
   "name" : "PARTNER",
-  "email": "test2@partner.com.br",
+  "email": {{ emailPartner }},
   "password": "12345"
 }
 
-> {% client.global.set("id", response.body.id); %}
+
+> {%
+    client.global.set("id", response.body.id);
+    client.global.set("email", response.body.email);
+%}
 
 ###
 
@@ -33,7 +38,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "test2@partner.com.br",
+  "email": {{ emailPartner }},
   "password": "12345"
 }
 
@@ -45,6 +50,9 @@ Content-Type: application/json
 Authorization: Bearer {{ access_token }}
 
 {
-  "name": "partner 1"
+  "name": "partner 3"
 }
 
+###
+GET http://localhost:3000/partners
+Authorization: Bearer {{ access_token }}

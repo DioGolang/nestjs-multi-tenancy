@@ -8,12 +8,25 @@ export class PartnersService {
 
   constructor(private prismaService: PrismaService) { }
 
-  create(createPartnerDto: CreatePartnerDto & {userId: number}) {
-    return 'This action adds a new partner';
+  async create(createPartnerDto: CreatePartnerDto & { userId: number }) {
+    const partner = await this.prismaService.$transaction(async (prisma) => {
+      const partner = await prisma.partner.create({
+        data: { name: createPartnerDto.name },
+      });
+      await prisma.partnerUser.create({
+        data: {
+          userId: createPartnerDto.userId,
+          partnerId: partner.id,
+        },
+      });
+      return partner;
+    });
+
+    return partner;
   }
 
   findAll() {
-    return `This action returns all partners`;
+    return this.prismaService.partner.findMany();
   }
 
   findOne(id: number) {

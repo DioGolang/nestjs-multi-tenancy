@@ -6,22 +6,21 @@ import {AuthGuard} from "../auth/auth.guard";
 @UseGuards(AuthGuard)
 @Controller('partners')
 export class PartnersController {
-    constructor(private readonly partnersService: PartnersService) {
-    }
+    constructor(private readonly partnersService: PartnersService) {}
 
     @Post()
     create(@Body() createPartnerDto: CreatePartnerDto, @Req() req: any) {
         return this.partnersService.create({
             ...createPartnerDto,
-            userId: req.user.id
+            userId: req.user.id,
         });
     }
+    //Attention: done just for convenience to list partners!
+    @Get()
+    findAll() {
+        return this.partnersService.findAll();
+    }
 
-    // @Get()
-    // findAll() {
-    //     return this.partnersService.findAll();
-    // }
-    //
     // @Get(':id')
     // findOne(@Param('id') id: string) {
     //     return this.partnersService.findOne(+id);
