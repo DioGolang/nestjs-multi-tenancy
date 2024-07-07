@@ -1,0 +1,50 @@
+GET http://localhost:3000/users
+Content-Type: application/json
+
+###
+
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name" : "john Doe 1:10",
+  "email": "teste@test12.com.br",
+  "password": "12345"
+}
+
+> {% client.global.set("id", response.body.id); %}
+
+###
+
+POST http://localhost:3000/partners/users
+Content-Type: application/json
+
+{
+  "name" : "PARTNER",
+  "email": "test2@partner.com.br",
+  "password": "12345"
+}
+
+> {% client.global.set("id", response.body.id); %}
+
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test2@partner.com.br",
+  "password": "12345"
+}
+
+> {% client.global.set("access_token", response.body.access_token); %}
+
+###
+POST http://localhost:3000/partners
+Content-Type: application/json
+Authorization: Bearer {{ access_token }}
+
+{
+  "name": "partner 1"
+}
+
